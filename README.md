@@ -7,4 +7,6 @@ A quick nostr bot that fetches bitcoin tweets from a [google sheet](https://docs
 
 * xonsh
 * nodejs
+* websocat
 * [nostril](https://github.com/jb55/nostril)
+
