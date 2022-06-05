@@ -1,0 +1,18 @@
+{
+  "name": "nostr-btc-twitter",
+  "description": "nostr bitcoin twitter bot",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/jb55/nostr-btc-twitter"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "dependencies": {
+    "googleapis": "^100.0.0"
+  },
+  "devDependencies": {
+    "tap": "~0.2.5"
+  }
+}

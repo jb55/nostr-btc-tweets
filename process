@@ -1,0 +1,76 @@
+#!/usr/bin/env node
+
+const fs = require('fs').promises
+const assert = require('assert')
+
+function usage() {
+	console.log("usage: process <items.json>")
+	process.exit(1)
+}
+
+const STATUS = 0
+const QUOTE = 1
+const BY = 2
+const BLOCK_HEIGHT = 3
+const DATE = 4
+const LINK = 5
+
+function assert_header(header)
+{
+	assert(header[STATUS], "Status")
+	assert(header[QUOTE], "Quote")
+	assert(header[BY], "By")
+	assert(header[BLOCK_HEIGHT], "Block Height")
+	assert(header[DATE], "Date")
+	assert(header[LINK], "Link")
+}
+
+function parse_row(row)
+{
+	const date = new Date(row[DATE])
+	const tweet = row[QUOTE]
+	const link = row[LINK]
+	const by = row[BY]
+	let obj = {tweet, by, link}
+	if (is_valid_date(date)) {
+		obj.date = date.getTime() / 1000
+	}
+	return obj
+}
+
+function is_valid_date(d) {
+	return d instanceof Date && !isNaN(d);
+}
+
+async function load_seen() {
+	return 1
+}
+
+function sort_date(a, b) {
+	return a.date - b.date
+}
+
+async function main() {
+	if (process.argv.length !== 3)
+		return usage()
+
+	const data = await fs.readFile(process.argv[2], 'utf8')
+	const seen = await load_seen()
+
+	const json = JSON.parse(data)
+	const rows = json.values
+
+	const header = rows[0]
+	assert_header(header)
+	rows.shift()
+
+	let parsed = rows.map(parse_row).filter(a => a.date)
+	parsed.sort(sort_date)
+
+	for (const row of parsed) {
+		console.log(JSON.stringify(row))
+	}
+}
+
+
+main()

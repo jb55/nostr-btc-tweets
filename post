@@ -1,0 +1,21 @@
+#!/usr/bin/env xonsh
+
+import json
+
+current = int($(cat last_post)) + 1
+
+line = json.loads($(sed -n @(current)p tweets.json).strip())
+
+sec = $(cat SECRET).strip()
+content = """[@{by}@twitter.com]({link}):
+
+{tweet}
+""".format(
+  by = line["by"],
+  link = line["link"],
+  tweet = line["tweet"]).strip()
+
+post=$(nostril --envelope --content @(content) --sec @(sec)).strip()
+
+echo @(current) > last_post
+echo @(post) | ./relayer
