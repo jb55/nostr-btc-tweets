@@ -4,7 +4,7 @@ POST="$(cat)"
 
 printf "using post '%s'\n" "$POST" >&2
 
-for relay in $(cat ~/dotfiles/relays)
+for relay in $(cat relays)
 do
 	echo "$POST" | websocat "$relay" &
 done
